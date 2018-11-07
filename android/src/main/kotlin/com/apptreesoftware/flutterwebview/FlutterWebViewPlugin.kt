@@ -87,10 +87,9 @@ class FlutterWebViewPlugin(val activity: Activity) : MethodCallHandler {
                 result.success("")
             }
             "onRedirect" -> {
-                val url = call.argument<String>("url")
-                val stopOnRedirect = call.argument<Boolean>("stopOnRedirect")
-                val policy = RedirectPolicy(url, stopOnRedirect, MatchType.PREFIX)
-                redirects.add(policy)
+                val url = call.argument<String>("url") as String
+                val stopOnRedirect = call.argument<Boolean>("stopOnRedirect") as Boolean
+                redirects.add(RedirectPolicy(url, stopOnRedirect, MatchType.PREFIX))
                 result.success("")
             }
             "dismiss" -> {
@@ -98,7 +97,7 @@ class FlutterWebViewPlugin(val activity: Activity) : MethodCallHandler {
                 currentActivity = null
             }
             "load" -> {
-                val url = call.argument<String>("url")
+                val url = call.argument<String>("url") as String
                 val headers = call.argument<Map<String, String>?>("headers")
                 val hashMapHeaders = HashMap<String, String>()
                 if (headers != null) {
@@ -147,7 +146,7 @@ class WebViewActivity : Activity() {
         super.onResume()
     }
 
-    fun load(url : String, headers : HashMap<String, String>) {
+    fun load(url : String?, headers : HashMap<String, String>) {
         intent.putExtra(WebViewActivity.EXTRA_URL, url)
         intent.putExtra(WebViewActivity.HEADERS, headers)
         webView.loadUrl(url, headers)
